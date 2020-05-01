@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Asynchronous JavaScript</title>
+</head>
+<body>
+    <h1>Asynchronous JavaScript</h1>
+    <script>
+    	/*
+    	const f2 = () => {
+    		setTimeout(() =>{
+    			console.log('second fn asynchrous');
+    		},2000);
+        	//console.log('second fn');
+        }
+        const f1 = () => {
+        	console.log('hello world');
+        	f2();
+        	console.log('the end');
+        }
+
+        f1();
+        */
+
+
+/*
+//callback hell
+        function getRecipe(){
+        	setTimeout(()=>{
+        		const recipeId = [523,23,234,455,332];
+        		console.log(recipeId);
+        		setTimeout((id)=>{
+        			const recipe = {
+        				title:'rice',
+        				publisher:'john'
+        			};
+        			console.log(`${id} ${recipe.title} ${recipe.publisher}`);
+        			setTimeout(publisher =>{
+        				const recipe2 = {
+        					title:'itialian',
+        					publisher:publisher
+        				};
+        				console.log(recipe2);
+        			},1000,recipe.publisher);
+        		},1000,recipeId[1]);
+        	},1500);
+        };
+        getRecipe();
+*/
+
+
+/*
+/////////////////////////////////////////////
+//Promises
+
+ const getId = new Promise((resolve,reject)=>{
+ 		setTimeout(()=>{
+ 			resolve([523,23,234,455,332]);
+ 			//reject('error from server')
+ 		},1500);
+ });
+ const getRecipe = recId => {
+ 	return new Promise((resolve,reject)=>{
+ 		setTimeout(id=>{
+ 			const recipe = {
+			title:'rice',
+			publisher:'john'
+			};
+			resolve(`${id} ${recipe.title} ${recipe.publisher}`);
+
+ 		},1500,recId);
+ 		
+ 	});
+ };
+
+ const getRelated = publisher =>{
+ 	return new Promise((resolve,reject)=>{
+ 		setTimeout(publisher=>{
+						const recipe2 = {
+        					title:'itialian',
+        					publisher:publisher
+        				};
+        				resolve(recipe2);
+ 		},1000,publisher);
+ 	});
+ };
+
+
+ // getId
+ // .then(ids =>{
+ // 	console.log(ids);
+ // 	return getRecipe(ids[2]);
+ // })
+ // .then(recipe=>{
+ // 	console.log(recipe);
+ // 	//return getRelated(recipe);
+ // 	return getRelated('john');
+ // })
+ // .then(recp=>{
+ // 	console.log(recp);
+ // })
+ // .catch(error=>{
+ // 	console.log(error);
+ // });
+ 
+
+ async function getRecipesAw(){
+ 	const ids = await getId;
+ 	console.log(ids);
+ 	const recipe = await getRecipe(ids[2]);
+ 	console.log(recipe);
+ 	const related = await getRelated('john');
+ 	console.log(related);
+
+ 	return recipe;
+ }
+ getRecipesAw().then(result=>{
+ 	console.log(result);
+ });
+
+
+*/
+
+// fetch('https://www.metaweather.com/api/location/44418/');
+// fetch('https://crossorigin.me/https://www.metaweather.com/api/location/44418/');
+function getCountry(countryName){
+    fetch(`https://restcountries.eu/rest/v2/name/${countryName}?fullText=true`)
+    .then(result=>{
+        console.log(result);
+        return result.json();
+    })
+    .then(data=>{
+        console.log(data);
+        const borders = data[0].borders;
+        console.log('borders = ',borders);
+    })
+    .catch(error=>{
+        console.log(error);
+    });
+}
+
+async function getCountryAw(countryName){
+    try{
+        const result = await fetch(`https://restcountries.eu/rest/v2/name/${countryName}?fullText=true`);
+        const data = await result.json();
+        console.log(data);
+        console.log(data[0].languages);
+        return data;
+    }
+    catch(error){
+        console.log(error);
+    }
+    
+}
+
+
+
+let dataCountry;
+getCountryAw('Bangladesh').then(data=>{
+   dataCountry = data;
+   console.log(dataCountry);
+});
+
+console.log('successful');
+
+
+
+
+    </script>
+</body>
+</html>
